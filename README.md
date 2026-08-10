@@ -7,8 +7,8 @@ conversion funnel and churn (loss) paths, trains **churn-prediction models** und
 strict anti-leakage evaluation, and presents everything in an **interactive
 Streamlit dashboard**.
 
-> Built on top of the author's undergraduate thesis (original scripts archived in
-> [`legacy/`](legacy/README.md)).
+> Earlier versions of the analysis scripts are archived in [`legacy/`](legacy/README.md)
+> for reference.
 
 ## Highlights
 
@@ -159,7 +159,7 @@ to regenerate (the dashboard shows whichever split ran last).
 │                               loss patterns, feature leak guard
 ├── data/                       [gitignored] raw + processed artifacts
 ├── output/                     [gitignored] charts, metrics JSON, model outputs
-└── legacy/                     original thesis scripts (archived)
+└── legacy/                     earlier analysis scripts (archived)
 ```
 
 ## Getting started

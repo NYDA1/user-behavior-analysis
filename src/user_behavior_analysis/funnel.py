@@ -58,7 +58,7 @@ def funnel_stats(events: pd.DataFrame, sessions: pd.DataFrame) -> dict:
 def classify_loss_patterns(sessions: pd.DataFrame) -> pd.DataFrame:
     """Label non-buying sessions with a loss-pattern category.
 
-    Patterns (definitions match the thesis):
+    Patterns (canonical definitions used across the project):
         pure_pv         — session contains only page views
         cart_abandoned  — item added to cart but never bought
         fav_only        — item favorited, never added to cart or bought

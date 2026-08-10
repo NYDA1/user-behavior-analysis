@@ -31,7 +31,7 @@ READ_DTYPES = {
 BEHAVIOR_TYPES = ["pv", "cart", "fav", "buy"]
 
 # ---------------------------------------------------------------------------
-# Analysis parameters (same methodology as the graduation thesis)
+# Analysis parameters (methodology shared across the whole project)
 # ---------------------------------------------------------------------------
 SEED = 42                 # global seed for sampling, splits, and models
 SAMPLE_SIZE = 5000        # number of complete users to sample from the full data
@@ -43,7 +43,7 @@ HIGH_VALUE_BUY_THRESHOLD = 3  # purchases per user for the "high-value" segment
 TIME_SPLIT_FEATURE_DAYS = 7
 TIME_SPLIT_LABEL_DAYS = 10
 
-# Loss-path pattern names (definitions match the thesis):
+# Loss-path pattern names (canonical definitions, see funnel.py):
 LOSS_PATTERN_PURE_PV = "pure_pv"       # session contains only pv
 LOSS_PATTERN_CART = "cart_abandoned"   # added to cart, never bought
 LOSS_PATTERN_FAV = "fav_only"          # favorited, never cart/buy

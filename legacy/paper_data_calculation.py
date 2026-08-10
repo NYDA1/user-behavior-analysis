@@ -1,6 +1,6 @@
 """
-论文数据计算
-汇总论文所需的所有核心数据
+核心数据汇总
+汇总所有核心统计指标
 """
 
 import pandas as pd
@@ -17,7 +17,7 @@ users_pv = df[df['behavior_type'] == 'pv']['user_id'].unique()
 users_loss = [u for u in users_pv if u not in users_buy]
 
 print("=" * 50)
-print("论文核心数据")
+print("核心数据")
 print("=" * 50)
 
 # 基础统计

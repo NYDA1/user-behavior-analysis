@@ -5,7 +5,7 @@
 会话化切分，分析转化漏斗与流失路径，训练**流失预测模型**（严格的防泄漏评估），
 并以**交互式 Streamlit 仪表盘**呈现全部结果。
 
-> 本项目基于作者的本科毕业设计（原始论文脚本归档在 [`legacy/`](legacy/README.md)）。
+> 早期版本的分析脚本归档在 [`legacy/`](legacy/README.md) 供参考。
 
 ## 项目亮点
 
@@ -138,7 +138,7 @@ data/processed/user_sample.parquet  （约 50 万条事件）
 ├── tests/                      会话切分、序列、流失模式、防泄漏守卫的单元测试
 ├── data/                       [gitignored] 原始数据与中间产物
 ├── output/                     [gitignored] 图表、指标 JSON、模型输出
-└── legacy/                     论文原版脚本（存档）
+└── legacy/                     早期分析脚本（存档）
 ```
 
 ## 快速开始

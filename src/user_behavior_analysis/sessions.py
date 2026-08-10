@@ -16,8 +16,8 @@ def split_sessions(
     ``gap_minutes`` minutes, or at the user's first event. Pure function,
     no I/O. Returns a sorted copy of ``events`` with ``session_id`` added.
 
-    Methodology matches the thesis: a session is a continuous interaction
-    window with at most a 30-minute idle gap.
+    A session is a continuous interaction window with at most a 30-minute
+    idle gap between consecutive events.
     """
     df = events.sort_values(["user_id", "timestamp"]).reset_index(drop=True)
 
