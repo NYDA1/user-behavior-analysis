@@ -102,6 +102,7 @@ def validate(df: pd.DataFrame, selected: set) -> None:
 
 def main() -> None:
     log_step("01 · sampling complete users")
+    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     log_step(f"raw data: {RAW_DATA_PATH} ({RAW_DATA_PATH.stat().st_size / 1e9:.2f} GB)")
 
     user_ids = collect_user_ids()

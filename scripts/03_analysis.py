@@ -31,6 +31,9 @@ COMPARE_METRICS = [
 
 @timed("03 · analysis")
 def run() -> None:
+    CHARTS_DIR.mkdir(parents=True, exist_ok=True)
+    METRICS_DIR.mkdir(parents=True, exist_ok=True)
+
     events = load_events()
     sessions = load_sessions()
     user_features = load_user_features()

@@ -146,6 +146,11 @@ def page_overview():
     events = load_events()
     events["date"] = events["timestamp"].dt.date
     daily = events.groupby("date", observed=True)["behavior_type"].size()
+    # Anchor the chart on the main observation window: a handful of stray
+    # records exist weeks before the campaign period, which would otherwise
+    # stretch the axis with zero-valued days.
+    cutoff = events["timestamp"].quantile(0.01).normalize().date()
+    daily = daily[daily.index >= cutoff]
     daily_fig = go.Figure(
         go.Bar(x=[str(d) for d in daily.index], y=daily.values, marker_color="#2a78d6")
     ).update_layout(title="Events per day", xaxis_title="Date", yaxis_title="Events", height=320)

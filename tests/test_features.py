@@ -42,7 +42,7 @@ def test_feature_values():
     events, sessions = events_and_sessions()
     features = build_user_features(events, sessions)
 
-    assert features.loc[1, "total_events"] == 2
+    assert features.loc[1, "total_events"] == 1  # buy events excluded
     assert features.loc[1, "n_pv"] == 1
     assert features.loc[2, "total_events"] == 3
     assert features.loc[2, "n_cart"] == 1
@@ -60,6 +60,17 @@ def test_max_ts_ceils_the_feature_window():
     assert features.loc[1, "n_pv"] == 1
     # ...and user 2 (all events after the cut) has no features at all
     assert 2 not in features.index
+
+
+def test_total_events_excludes_purchase_events():
+    """Regression guard: total_events must not include buy events, otherwise
+    total_events - n_pv - n_cart - n_fav equals n_buy and a linear model can
+    reconstruct the label (label leakage)."""
+    events, sessions = events_and_sessions()  # user 1: pv + buy
+    features = build_user_features(events, sessions)
+    assert features.loc[1, "total_events"] == 1  # the pv only, not the buy
+    assert features.loc[1, "n_pv"] + features.loc[1, "n_cart"] + features.loc[1, "n_fav"] \
+        == features.loc[1, "total_events"]
 
 
 def test_labels_only_mark_actual_buyers():

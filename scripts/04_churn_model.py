@@ -41,6 +41,8 @@ from sklearn.metrics import (
     roc_curve,
 )
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 from user_behavior_analysis import features as feat
 from user_behavior_analysis import plots as P
@@ -118,8 +120,11 @@ def prepare_split(args, events, sessions, user_features):
 # ---------------------------------------------------------------------------
 def build_models(X_train, y_train, args):
     models = {
-        "LogisticRegression": LogisticRegression(
-            class_weight="balanced", max_iter=1000, random_state=args.seed
+        # StandardScaler: feature scales range from 0-1 ratios to 0-800 counts;
+        # scaling fixes lbfgs convergence and makes LR coefficients comparable.
+        "LogisticRegression": make_pipeline(
+            StandardScaler(),
+            LogisticRegression(class_weight="balanced", max_iter=2000, random_state=args.seed),
         ),
         "RandomForest": RandomForestClassifier(
             n_estimators=300, class_weight="balanced_subsample",
@@ -184,6 +189,9 @@ def evaluate_model(name, model, X_test, y_test):
 
 
 def run(args) -> None:
+    MODEL_DIR.mkdir(parents=True, exist_ok=True)
+    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+
     events = load_events()
     sessions = load_sessions()
     user_features = load_user_features()
@@ -234,8 +242,8 @@ def run(args) -> None:
     for name, model in models.items():
         if hasattr(model, "feature_importances_"):
             importance[name] = pd.Series(model.feature_importances_, index=feat.FEATURE_COLS)
-        else:  # linear model: |standardized coefficient|
-            coefs = pd.Series(np.abs(model.coef_[0]), index=feat.FEATURE_COLS)
+        else:  # linear model: |standardized coefficient| (last step of pipeline)
+            coefs = pd.Series(np.abs(model[-1].coef_[0]), index=feat.FEATURE_COLS)
             importance[name] = coefs / coefs.sum()
     save_json({name: s.sort_values(ascending=False).to_dict() for name, s in importance.items()},
               MODEL_DIR / "feature_importance.json")

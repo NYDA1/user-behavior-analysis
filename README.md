@@ -100,7 +100,7 @@ data/processed/user_sample.parquet  (~500k events)
 
 | Model | ROC-AUC | PR-AUC | F1@0.5 | MCC | Precision@top-10% |
 |---|---|---|---|---|---|
-| Logistic Regression | 0.726 | 0.832 | 0.730 | 0.337 | 0.890 |
+| Logistic Regression | 0.718 | 0.825 | 0.731 | 0.326 | 0.860 |
 | RandomForest | 0.686 | 0.814 | 0.825 | 0.264 | 0.870 |
 | XGBoost | 0.712 | 0.828 | 0.774 | 0.296 | 0.890 |
 
@@ -115,7 +115,7 @@ Prevalence in the label window: **38.6%**.
 
 | Model | ROC-AUC | PR-AUC | Precision@top-10% |
 |---|---|---|---|
-| Logistic Regression | 0.569 | 0.466 | 0.570 |
+| Logistic Regression | 0.571 | 0.466 | 0.570 |
 | RandomForest | 0.530 | 0.409 | 0.440 |
 | XGBoost | 0.526 | 0.417 | 0.460 |
 
