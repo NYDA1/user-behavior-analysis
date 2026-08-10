@@ -10,6 +10,10 @@ Streamlit dashboard**.
 > Earlier versions of the analysis scripts are archived in [`legacy/`](legacy/README.md)
 > for reference.
 
+<p align="center">
+  <img src="docs/screenshots/01_overview.png" alt="Dashboard overview" width="85%"/>
+</p>
+
 ## Highlights
 
 - **Streaming big-data ingestion** — two-pass chunked scan of the 3.4 GB CSV with
@@ -126,6 +130,18 @@ Predicting a future window is harder — the top-decile precision still lifts 47
 over the 38.6% baseline. Run `python scripts/04_churn_model.py --split time`
 to regenerate (the dashboard shows whichever split ran last).
 
+## Dashboard screenshots
+
+Run `streamlit run dashboard/app.py` for the full interactive app — every
+chart below is live (hover, zoom, filter, and a threshold slider that
+recomputes the confusion matrix).
+
+<p align="center">
+  <img src="docs/screenshots/02_funnel.png" alt="Conversion funnel" width="85%"/>
+  <img src="docs/screenshots/04_sankey.png" alt="User journey sankey" width="85%"/>
+  <img src="docs/screenshots/06_churn_model.png" alt="Churn model" width="85%"/>
+</p>
+
 ## Modeling details
 
 - **Task**: predict whether a user purchases at all, from pre-purchase behavior.
@@ -155,6 +171,8 @@ to regenerate (the dashboard shows whichever split ran last).
 ├── scripts/                    01_sample_users · 02_build_features ·
 │                               03_analysis · 04_churn_model
 ├── dashboard/app.py            Streamlit dashboard
+├── docs/screenshots/           README screenshots (regenerate with
+│                               scripts/screenshots.py)
 ├── tests/                      unit tests for sessionization, sequences,
 │                               loss patterns, feature leak guard
 ├── data/                       [gitignored] raw + processed artifacts
