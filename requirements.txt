@@ -1,0 +1,18 @@
+# Core data stack
+pandas>=3.0
+numpy>=2.0
+pyarrow>=15
+
+# Visualization
+matplotlib>=3.10
+plotly>=6.0
+streamlit>=1.40
+
+# Modeling
+scikit-learn>=1.8
+# Optional: install if you want the XGBoost model included in the comparison.
+# The pipeline gracefully falls back to LogisticRegression + RandomForest when missing.
+# xgboost>=2.1
+
+# Development / testing
+pytest>=8

@@ -1,0 +1,21 @@
+# Raw data and intermediate artifacts (>3 GB, never committed)
+data/
+output/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# IDE / tools
+.idea/
+.vscode/
+.claude/
+.streamlit/
+
+# OS
+.DS_Store
+Thumbs.db
