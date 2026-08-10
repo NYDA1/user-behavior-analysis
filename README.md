@@ -48,8 +48,11 @@ The full dataset holds **~100M events** across **~1M users** over 10 days
 (~500k events) so analysis stays interactive while remaining representative
 (pv ≈ 89%, buy ≈ 2% — matching the public distribution).
 
-> Download the raw CSV to `data/raw/UserBehavior.csv` before running
-> (the file is gitignored).
+> **Download:** the dataset is hosted on Alibaba Tianchi —
+> [UserBehavior (淘宝用户购物行为数据集)](https://tianchi.aliyun.com/dataset/649)
+> (free, requires a Tianchi account). Download `UserBehavior.csv`, unzip if
+> needed, and place it at `data/raw/UserBehavior.csv` before running the
+> pipeline (the file is gitignored, ~3.4 GB unpacked).
 
 ## Pipeline
 

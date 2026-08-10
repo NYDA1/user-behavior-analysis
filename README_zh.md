@@ -36,7 +36,10 @@
 流水线抽样 **5,000 个完整用户**（约 50 万条事件），在保证交互性的同时保持代表性
 （pv ≈ 89%、buy ≈ 2%，与公开数据分布一致）。
 
-> 运行前请将原始 CSV 下载到 `data/raw/UserBehavior.csv`（该文件已加入 .gitignore）。
+> **下载**：数据集托管在阿里天池 ——
+> [UserBehavior（淘宝用户购物行为数据集）](https://tianchi.aliyun.com/dataset/649)
+> （免费，需要天池账号）。下载 `UserBehavior.csv`（如需解压）后放到
+> `data/raw/UserBehavior.csv` 再运行流水线（该文件已加入 .gitignore，解压后约 3.4 GB）。
 
 ## 流水线
 
