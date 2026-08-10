@@ -10,9 +10,10 @@ Usage:
     # terminal 2
     python scripts/screenshots.py
 
-Each page is captured only after Streamlit finishes re-running: we poll for
-the spinner to disappear (up to 90s) plus a settle delay, so charts are fully
-rendered in the screenshots.
+Robustness: after clicking a sidebar section we (1) wait for Streamlit's
+re-run spinner to appear, (2) wait for it to disappear, (3) wait for a
+marker text unique to the target page, and (4) retry the click once if the
+marker never shows — so a screenshot can never capture the previous page.
 
 Screenshots land in docs/screenshots/ and are referenced from README.md.
 """
@@ -27,26 +28,48 @@ OUT_DIR = Path(__file__).resolve().parents[1] / "docs" / "screenshots"
 
 PAGES = ["Overview", "Funnel", "Loss paths", "Sankey", "Feature compare", "Churn model"]
 
-# Streamlit shows a spinner/status widget while re-running the script; the
-# screenshot waits until it is gone so charts are fully rendered.
-SPINNER_JS = (
-    "() => !document.querySelector('[data-testid=\"stStatusWidget\"], "
-    "[data-testid=\"stSpinner\"]')"
-)
-SPINNER_TIMEOUT_MS = 90_000
-SETTLE_MS = 1_500
+# Unique text marker per section, verified before capturing.
+PAGE_MARKERS = {
+    "Overview": "Behavior type distribution",
+    "Funnel": "Granularity",
+    "Loss paths": "Loss-path patterns among non-buying sessions",
+    "Sankey": "Show start/end nodes",
+    "Feature compare": "Metric",
+    "Churn model": "Decision threshold",
+}
+
+SPINNER_SEL = '[data-testid="stStatusWidget"], [data-testid="stSpinner"]'
+SPINNER_PRESENT_JS = f"() => document.querySelector('{SPINNER_SEL}') !== null"
+SPINNER_GONE_JS = f"() => document.querySelector('{SPINNER_SEL}') === null"
 
 
 def slug(name: str) -> str:
     return name.lower().replace(" ", "_")
 
 
-def wait_rendered(page) -> None:
-    try:
-        page.wait_for_function(SPINNER_JS, timeout=SPINNER_TIMEOUT_MS)
-    except PlaywrightTimeoutError:
-        print("  warn: spinner never disappeared; capturing anyway")
-    page.wait_for_timeout(SETTLE_MS)
+def wait_rendered(page, name: str, retries: int = 2) -> None:
+    marker = PAGE_MARKERS[name]
+    for attempt in range(retries + 1):
+        try:
+            # 1) click took effect: a re-run spinner appears
+            try:
+                page.wait_for_function(SPINNER_PRESENT_JS, timeout=8_000)
+            except PlaywrightTimeoutError:
+                pass  # re-run may be too fast to observe; keep going
+            # 2) re-run finished: spinner gone
+            page.wait_for_function(SPINNER_GONE_JS, timeout=90_000)
+            # 3) target page really rendered
+            page.get_by_text(marker, exact=False).first.wait_for(timeout=30_000)
+            page.wait_for_timeout(1_200)
+            return
+        except PlaywrightTimeoutError:
+            if attempt < retries:
+                print(f"  retry {attempt + 1}/{retries}: marker '{marker}' missing, re-clicking")
+                page.locator('section[data-testid="stSidebar"] label').filter(
+                    has_text=name
+                ).first.click()
+            else:
+                raise
 
 
 def main() -> None:
@@ -55,16 +78,16 @@ def main() -> None:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 900})
         page.goto(BASE_URL, wait_until="networkidle")
-        wait_rendered(page)
+        wait_rendered(page, PAGES[0])
         page.screenshot(path=str(OUT_DIR / f"01_{slug(PAGES[0])}.png"), full_page=True)
-        print(f"01 {PAGES[0]}")
+        print(f"01 {PAGES[0]} (marker verified)")
 
         radio_group = page.locator('section[data-testid="stSidebar"] label')
         for i, name in enumerate(PAGES[1:], start=2):
             radio_group.filter(has_text=name).first.click()
-            wait_rendered(page)
+            wait_rendered(page, name)
             page.screenshot(path=str(OUT_DIR / f"{i:02d}_{slug(name)}.png"), full_page=True)
-            print(f"{i:02d} {name}")
+            print(f"{i:02d} {name} (marker verified)")
 
         browser.close()
     print(f"\nsaved to {OUT_DIR}")
