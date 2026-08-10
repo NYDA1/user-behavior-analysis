@@ -7,10 +7,6 @@
 
 > 早期版本的分析脚本归档在 [`legacy/`](legacy/README.md) 供参考。
 
-<p align="center">
-  <img src="docs/screenshots/01_overview.png" alt="仪表盘概览" width="85%"/>
-</p>
-
 ## 项目亮点
 
 - **流式大数据处理** — 两遍分块扫描 3.4 GB CSV，峰值内存约 100 MB；可复现的
@@ -114,17 +110,6 @@ data/processed/user_sample.parquet  （约 50 万条事件）
 运行 `python scripts/04_churn_model.py --split time` 重新生成
 （仪表盘显示最后一次运行的切分方案）。
 
-## 仪表盘截图
-
-运行 `streamlit run dashboard/app.py` 体验完整交互应用——以下图表全部可交互
-（悬停、缩放、筛选，以及实时重算混淆矩阵的阈值滑块）。
-
-<p align="center">
-  <img src="docs/screenshots/02_funnel.png" alt="转化漏斗" width="85%"/>
-  <img src="docs/screenshots/04_sankey.png" alt="用户行为桑基图" width="85%"/>
-  <img src="docs/screenshots/06_churn_model.png" alt="流失预测模型" width="85%"/>
-</p>
-
 ## 建模细节
 
 - **任务**：仅基于购买前的行为，预测用户是否会完成购买。
@@ -150,7 +135,6 @@ data/processed/user_sample.parquet  （约 50 万条事件）
 ├── scripts/                    01_sample_users · 02_build_features ·
 │                               03_analysis · 04_churn_model
 ├── dashboard/app.py            Streamlit 仪表盘
-├── docs/screenshots/           README 截图（用 scripts/screenshots.py 重新生成）
 ├── tests/                      会话切分、序列、流失模式、防泄漏守卫的单元测试
 ├── data/                       [gitignored] 原始数据与中间产物
 ├── output/                     [gitignored] 图表、指标 JSON、模型输出
